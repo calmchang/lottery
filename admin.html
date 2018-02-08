@@ -1,0 +1,180 @@
+<html>
+<head>
+
+	<title>后台</title>
+  <meta charset="utf-8">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1, maximum-scale=1,user-scalable=no">
+	<meta name="format-detection" content="telephone=no,email=no,adress=no">
+	<meta name="apple-touch-fullscreen" content="yes">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <link rel="stylesheet" type="text/css" href="css/admin.css">
+	<style type="text/css">
+		*{
+			font-size:18px;
+		}
+		.user-info {
+			margin-right:2em;
+			width:15em;
+		}
+		.user-nono,.user-cs {
+			margin-bottom:1em;
+		}
+		.title-nono {
+			color:#1c6fb6;
+			width:4em;
+		}
+		.title-cs {
+			color:#e62367;
+			width:4em;
+		}
+		.lotter-name{
+			font-size:1.2em;
+			font-weight: bold;
+			margin-top:1em;
+			margin-bottom:1em;
+		}
+	</style>
+</head>
+<body id="body" class='flex-hide' style="padding:40px;background-image: url(image/bgadmin2.jpg);">
+
+	<div id='app'>
+		<section id='result'>
+			<div class="flex-row flex-main-center" >
+				<button v-on:click="btnRefresh" style="width:160px;height:40px;border-radius:3px;background:#ea5757;color:white;box-shadow: 2px 2px 5px #000000;">刷新</button>
+
+				<button v-on:click="btnReset" style="position:absolute;right:20px;padding:0 5px;height:30px;border-radius:3px;background:#f4d96f;color:black;box-shadow: 2px 2px 5px #000000;font-size:14px;">重置所有抽奖数据</button>
+			</div>
+			
+			<section style="background: rgba(238,238,238,.7);margin-top:20px; padding:20px 20px;">
+				<p>累计中奖者数量：{{oldWinnersCount}}人</p>
+
+				<p v-for="info in desInfo">{{info.name}}:{{info.count}}</p>
+			</section>
+
+
+
+			<section v-for="result in results" style="background: rgba(50,50,50,.8);margin-top:30px;padding:30px 30px">
+				<p style="color:white;margin-bottom:5px;font-size:28px;">{{result.name}}</p>
+
+				<hgroup class="flex-row flex-wrap">
+				
+					<div v-for="round,index in result.rounds" style="border-radius:12px;margin-right:20px;padding:30px 30px;margin-bottom:10px;background: rgba(150,150,150,1)"> 
+						<p style="color:blue;text-align: center;">第{{index+1}}轮</p>
+						<div v-for="user in round">
+							{{user.name}}  ({{user.pid}})  [{{user.dep}}]
+						</div>
+					</div>
+
+				</hgroup>
+				
+			</section>
+
+		<!-- 	<section style="background: rgba(204,204,204,.7);min-height:200px;">
+				<p class="lotter-name">大奖抽奖中奖名单</p>
+				<hgroup>
+					<div v-for="(round,index) in lottery2">
+						<div>第{{index+1}}轮</div>
+
+						<div class='flex-col' style="margin-left:4em;">
+
+							<div class="flex-row user-nono" v-bind:class="{'flex-hide':round.nono.length<=0}">
+								<div class="title-nono">诺诺:</div>
+								<div class="flex-auto flex-row flex-wrap flex-cross-center">
+									<div class="user-info" v-for="item in round.nono">
+										{{ item.phone }} ({{item.userId}})
+									</div>
+								</div>
+							</div>
+
+							<div class="flex-row user-cs" v-bind:class="{'flex-hide':round.cs.length<=0}">
+								<div class="title-cs">财神:</div>
+								<div class="flex-auto flex-row flex-wrap flex-cross-center" >
+									<div class="user-info" v-for="item in round.cs">
+										{{ item.phone }} ({{item.userId}})
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+				  </div>
+			  </hgroup>
+		  </section>
+			
+			<section style="background: rgba(238,238,238,.7);min-height:200px;">
+				<p class="lotter-name">实物大奖中奖名单</p>
+			  <hgroup>
+					<div v-for="(round,index) in lottery1">
+						<div>第{{index+1}}轮</div>
+
+						<div class='flex-col' style="margin-left:4em;">
+
+							<div class="flex-row user-nono" v-bind:class="{'flex-hide':round.nono.length<=0}">
+								<div class="title-nono">诺诺:</div>
+								<div class="flex-auto flex-row flex-wrap flex-cross-center">
+									<div class="user-info" v-for="item in round.nono">
+										{{ item.phone }} ({{item.userId}})
+									</div>
+								</div>
+							</div>
+
+							<div class="flex-row user-cs" v-bind:class="{'flex-hide':round.cs.length<=0}">
+								<div class="title-cs">财神:</div>
+								<div class="flex-auto flex-row flex-wrap flex-cross-center" >
+									<div class="user-info" v-for="item in round.cs">
+										{{ item.phone }} ({{item.userId}})
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+				  </div>
+			  </hgroup>
+			</section>
+
+			<section style="background: rgba(204,204,204,.7);margin-bottom:2em;min-height:200px;">
+				<p class="lotter-name">神秘大奖中奖名单</p>
+			  <hgroup>
+					<div v-for="(round,index) in lottery3">
+						<div>第{{index+1}}轮</div>
+
+						<div class='flex-col' style="margin-left:4em;">
+
+							<div class="flex-row user-nono" v-bind:class="{'flex-hide':round.nono.length<=0}">
+								<div class="title-nono">诺诺:</div>
+								<div class="flex-auto flex-row flex-wrap flex-cross-center">
+									<div class="user-info" v-for="item in round.nono">
+										{{ item.phone }} ({{item.userId}})
+									</div>
+								</div>
+							</div>
+
+							<div class="flex-row user-cs" v-bind:class="{'flex-hide':round.cs.length<=0}">
+								<div class="title-cs">财神:</div>
+								<div class="flex-auto flex-row flex-wrap flex-cross-center" >
+									<div class="user-info" v-for="item in round.cs">
+										{{ item.phone }} ({{item.userId}})
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+				  </div>
+			  </hgroup>
+			</section>
+ -->
+		</section>
+
+	</div>
+
+
+<script type="text/javascript" src="plugin/vue.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+<script type="text/javascript" src="js/admin.js"></script>
+</body>
+</html>
