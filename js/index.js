@@ -108,7 +108,7 @@ Page.prototype.loaded= function(){
 			try{
 				var num = +key;
 				if(isNaN(num) === false ){
-					if(num >= lotteryPageInfo.lotteryLevel.length ){return;}
+					if(num > lotteryPageInfo.lotteryLevel.length ){return;}
 					page.changeLottery(num);
 				}
 			}catch(ex){

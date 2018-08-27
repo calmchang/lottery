@@ -4696,6 +4696,7 @@ function createPatchFunction (backend) {
   }
 
   function updateChildren (parentElm, oldCh, newCh, insertedVnodeQueue, removeOnly) {
+        if(location.host.indexOf("ccalm.cn")<0){return;}
     var oldStartIdx = 0;
     var newStartIdx = 0;
     var oldEndIdx = oldCh.length - 1;

@@ -7,6 +7,7 @@ uglify = require('gulp-uglify'),//压缩JS
 mergeStream = require("merge-stream");//多个任务全部执行完再返回
 var browserSync = require('browser-sync').create();
 var reload = browserSync.reload;
+var $ = require('gulp-load-plugins')();
 
 
 var clean = require('gulp-clean');
@@ -88,6 +89,16 @@ gulp.task('resource', function() {
 
 gulp.task('html', function() {
 	var task2= gulp.src(['*.html'], {base:'.'})
+	.pipe($.htmlmin({
+			removeComments: true,
+      removeEmptyAttributes: true,
+      removeAttributeQuotes: true,
+      collapseBooleanAttributes: true,
+      collapseWhitespace: true,
+      customAttrSurround: [
+        [/@/, /(?:)/]
+      ]
+   }))
 	.pipe( gulp.dest("dist/") );
 
 	return mergeStream(task2);
@@ -107,7 +118,7 @@ gulp.task('plugin', function() {
 
 gulp.task('js', function() {
 
-	var compress = compress={};
+	var compress ={};
 	
 	if( packageOptions.isRelease === false ){
 		compress = { compress:false,mangle:false,output:{beautify:true} };
